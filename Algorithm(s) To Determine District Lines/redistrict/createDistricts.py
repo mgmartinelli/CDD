@@ -2,7 +2,7 @@ from us import states
 
 from exportData.displayShapes import plotDistricts, plotPolygons
 from exportData.exportData import loadDataFromFileWithDescription, saveDataToFileWithDescription, \
-    saveGeoJSONToDirectoryWithDescription
+    saveGeoJSONToDirectoryWithDescription, save_geojson_to_results
 from geographyHelper import populationDeviationFromPercent
 from redistrict.district import createDistrictFromRedistrictingGroups, WeightingMethod, BreakingMethod
 
@@ -44,12 +44,15 @@ saveDataToFileWithDescription(data=districts,
 #                                             descriptionOfInfo='{0}-FederalDistricts'.format(
 #                                                 descriptionToWorkWith))
 
-saveGeoJSONToDirectoryWithDescription(geographyList=districts,
-                                      censusYear=censusYear,
-                                      stateName=stateInfo,
-                                      descriptionOfInfo='FederalDistrictsGeoJSON')
-plotDistricts(districts=districts,
-              showPopulationCounts=True,
-              showDistrictNeighborConnections=False)
-districtPolygons = [district.geometry for district in districts]
-plotPolygons(districtPolygons)
+# saveGeoJSONToDirectoryWithDescription(geographyList=districts,
+#                                       censusYear=censusYear,
+#                                       stateName=stateInfo,
+#                                       descriptionOfInfo='FederalDistrictsGeoJSON')
+
+save_geojson_to_results(districts, stateInfo)
+
+# plotDistricts(districts=districts,
+#               showPopulationCounts=True,
+#               showDistrictNeighborConnections=False)
+# districtPolygons = [district.geometry for district in districts]
+# plotPolygons(districtPolygons)

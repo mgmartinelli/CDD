@@ -11,31 +11,6 @@ from tqdm import tqdm
 from geographyHelper import shapelyGeometryToGeoJSON
 
 
-# import fiona
-
-# def exportGeographiesToShapefile(geographyList, descriptionOfInfo):
-#     # Define a polygon feature geometry with one attribute
-#     schema = {
-#         'geometry': 'Polygon',
-#         'properties': {'id': 'int'},
-#     }
-#
-#     countyShapeDataPath = path.expanduser('~/Documents/{0}.shp'.format(descriptionOfInfo))
-#
-#     # Write a new Shapefile
-#     with fiona.open(countyShapeDataPath, 'w', 'ESRI Shapefile', schema) as c:
-#         id = 0
-#         for geoToExport in geographyList:
-#             if hasattr(geoToExport, 'FIPS'):
-#                 id = geoToExport.FIPS
-#             else:
-#                 id = id+1
-#             c.write({
-#                 'geometry': mapping(geoToExport.geometry),
-#                 'properties': {'id': id},
-#             })
-
-
 def saveDataToDirectoryWithDescription(data, censusYear, stateName, descriptionOfInfo):
     directoryPath = path.expanduser('~/Documents/{0}-{1}-{2}Info'.format(censusYear, stateName, descriptionOfInfo))
     if not path.exists(directoryPath):
@@ -89,6 +64,50 @@ def saveGeoJSONToDirectoryWithDescription(geographyList, censusYear, stateName, 
             print(jsonString, file=jsonFile)
         tqdm.write('*** Saved: {0} ***'.format(filePath))
         count += 1
+
+
+def save_geojson_to_results(geography_list, state_name):
+    geojson_objects = []
+    district_populations = []
+    for geography in geography_list:
+
+        if type(geography.geometry) is MultiPolygon:
+            exteriors = [Polygon(polygon.exterior) for polygon in geography.geometry]
+            exterior_polygon = MultiPolygon(exteriors)
+        else:
+            exterior_polygon = Polygon(geography.geometry.exterior)
+
+        exterior_json = shapelyGeometryToGeoJSON(exterior_polygon)
+        district_pop = geography.population
+
+        geojson_objects.append(exterior_json)
+        district_populations.append(district_pop)
+
+    with open('../results/us-states-population-emphasis.json', 'r+') as json_file:
+        # Load current results
+        results_so_far = json.load(json_file)
+        num_results_so_far = len(results_so_far["features"])
+
+        district_num = 0
+        for json_string in geojson_objects:
+            new_district = {
+                'type': 'Feature',
+                'id': '{0:0=2d}'.format(num_results_so_far + 1),
+                'properties': {
+                    'name': '{0} {1:0=2d}'.format(state_name, district_num + 1),
+                    'population': district_populations[district_num]
+                },
+                'geometry': json.loads(json_string)
+            }
+
+            results_so_far["features"].append(new_district)
+            num_results_so_far += 1
+            district_num += 1
+
+        # Overwrite file contents
+        json_file.seek(0)
+        json.dump(results_so_far, json_file)
+        json_file.truncate()
 
 
 def loadDataFromDirectoryWithDescription(censusYear, stateName, descriptionOfInfo):

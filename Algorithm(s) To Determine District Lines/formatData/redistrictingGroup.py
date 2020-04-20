@@ -1,7 +1,7 @@
 from exportData.displayShapes import plotGraphObjectGroups, plotPolygons, plotRedistrictingGroups, \
     plotBlocksForRedistrictingGroup
 from shapely.geometry import MultiPolygon
-from exportData.exportData import saveDataToFileWithDescription
+from exportData.exportData import save_data_to_file_with_description
 from formatData.atomicBlock import createAtomicBlocksFromBlockList, validateAllAtomicBlocks, \
     assignNeighborBlocksFromCandidateBlocks
 from formatData.blockBorderGraph import BlockBorderGraph
@@ -188,10 +188,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
                 if len(neighborsOfBlocks) > 0:
                     blocksToActOn = neighborsOfBlocks
                 else:
-                    saveDataToFileWithDescription(data=self,
-                                                  censusYear='',
-                                                  stateName='',
-                                                  descriptionOfInfo='ErrorCase-NoNeighborsForGraphGroups')
+                    save_data_to_file_with_description(data=self,
+                                                       census_year='',
+                                                       state_name='',
+                                                       description_of_info='ErrorCase-NoNeighborsForGraphGroups')
                     plotGraphObjectGroups([self.children, blocksToActOn], showDistrictNeighborConnections=True)
                     plotBlocksForRedistrictingGroup(self, showBlockNeighborConnections=True)
                     raise RuntimeError("Can't find neighbors for graph objects")
@@ -212,10 +212,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
                             filledBlocks.append(blockToActOn)
                     blocksToActOnThisRound = [block for block in blocksToActOnThisRound if block not in blocksActedUpon]
                     if len(blocksActedUpon) == 0:
-                        saveDataToFileWithDescription(data=self,
-                                                      censusYear='',
-                                                      stateName='',
-                                                      descriptionOfInfo='ErrorCase-BlocksCanNotFindPreviousNeighbor')
+                        save_data_to_file_with_description(data=self,
+                                                           census_year='',
+                                                           state_name='',
+                                                           description_of_info='ErrorCase-BlocksCanNotFindPreviousNeighbor')
                         plotGraphObjectGroups([filledBlocks, blocksToActOnThisRound])
                         plotBlocksForRedistrictingGroup(self, showBlockNeighborConnections=True, showGraphHeatmap=True,
                                                         showBlockGraphIds=True)
@@ -266,11 +266,11 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
             #     seamSplit.append(block)
             #     plotPolygons([block.geometry])
             else:
-                saveDataToFileWithDescription(data=[self, alignment, aSplitPolygon, bSplitPolygon, seamSplitPolygon,
-                                                    block.geometry, seamOnEdge, polygonSplitResultType],
-                                              censusYear='',
-                                              stateName='',
-                                              descriptionOfInfo='ErrorCase-CouldNotFindContainerForBlock')
+                save_data_to_file_with_description(data=[self, alignment, aSplitPolygon, bSplitPolygon, seamSplitPolygon,
+                                                         block.geometry, seamOnEdge, polygonSplitResultType],
+                                                   census_year='',
+                                                   state_name='',
+                                                   description_of_info='ErrorCase-CouldNotFindContainerForBlock')
                 plotPolygons([aSplitPolygon, bSplitPolygon, seamSplitPolygon, block.geometry])
                 raise RuntimeError("Couldn't find a container for block: {0}".format(block.geometry))
 
@@ -348,10 +348,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
                                 geometry is not aSplitPolygon and geometry is not bSplitPolygon]
             if aSplitPolygon is None or bSplitPolygon is None:
                 plotPolygons(splitPolygons + [aSplitRepresentativeBlock.geometry, bSplitRepresentativeBlock.geometry])
-                saveDataToFileWithDescription(data=self,
-                                              censusYear='',
-                                              stateName='',
-                                              descriptionOfInfo='ErrorCase-AorBSplitIsNone')
+                save_data_to_file_with_description(data=self,
+                                                   census_year='',
+                                                   state_name='',
+                                                   description_of_info='ErrorCase-AorBSplitIsNone')
                 raise RuntimeError('Split a or b not found')
 
             if aSplitPolygon is bSplitPolygon:
@@ -359,10 +359,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
                 continue
 
             if len(leftOverPolygons) is not len(splitPolygons) - 2:
-                saveDataToFileWithDescription(data=self,
-                                              censusYear='',
-                                              stateName='',
-                                              descriptionOfInfo='ErrorCase-MissingPolygons')
+                save_data_to_file_with_description(data=self,
+                                                   census_year='',
+                                                   state_name='',
+                                                   description_of_info='ErrorCase-MissingPolygons')
                 raise RuntimeError('Missing some polygons for mapping. Split polygons: {0} Left over polygon: {1}'
                                    .format(len(splitPolygons), len(leftOverPolygons)))
 
@@ -471,10 +471,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
     def validateBlockNeighbors(self):
         contiguousRegions = findContiguousGroupsOfGraphObjects(self.children)
         if len(contiguousRegions) > 1:
-            saveDataToFileWithDescription(data=[self, contiguousRegions],
-                                          censusYear='',
-                                          stateName='',
-                                          descriptionOfInfo='ErrorCase-BlocksNotContiguous')
+            save_data_to_file_with_description(data=[self, contiguousRegions],
+                                               census_year='',
+                                               state_name='',
+                                               description_of_info='ErrorCase-BlocksNotContiguous')
             plotGraphObjectGroups(contiguousRegions, showDistrictNeighborConnections=True)
             plotBlocksForRedistrictingGroup(self, showBlockNeighborConnections=True, showBlockGraphIds=True)
             raise RuntimeError("Don't have a contiguous set of AtomicBlocks. There are {0} distinct groups.".format(
@@ -484,10 +484,10 @@ class RedistrictingGroup(BlockBorderGraph, GraphObject):
             neighborBlocksNotInGroup = [neighborBlock for neighborBlock in block.allNeighbors
                                         if neighborBlock not in self.children]
             if len(neighborBlocksNotInGroup):
-                saveDataToFileWithDescription(data=[self, block],
-                                              censusYear='',
-                                              stateName='',
-                                              descriptionOfInfo='ErrorCase-BlockHasNeighborOutsideRedistrictingGroup')
+                save_data_to_file_with_description(data=[self, block],
+                                                   census_year='',
+                                                   state_name='',
+                                                   description_of_info='ErrorCase-BlockHasNeighborOutsideRedistrictingGroup')
                 plotBlocksForRedistrictingGroup(self, showBlockNeighborConnections=True, showBlockGraphIds=True)
                 raise RuntimeError("Some blocks have neighbor connections with block outside the redistricting group")
 
@@ -579,8 +579,8 @@ def reorganizeAtomicBlockBetweenRedistrictingGroups(redistrictingGroups):
 
 # def updateAllBlockContainersData():
 #     tqdm.write('*** Updating All Block Container Data ***')
-#     with tqdm(total=len(RedistrictingGroup.redistrictingGroupList)) as pbar:
-#         for blockContainer in RedistrictingGroup.redistrictingGroupList:
+#     with tqdm(total=len(RedistrictingGroup.redistricting_group_list)) as pbar:
+#         for blockContainer in RedistrictingGroup.redistricting_group_list:
 #             tqdm.write('   *** One more ***')
 #             blockContainer.updateBlockContainerData()
 #             pbar.update(1)
@@ -764,22 +764,22 @@ def validateRedistrictingGroups(groupList):
 def validateContiguousRedistrictingGroups(groupList):
     contiguousRegions = findContiguousGroupsOfGraphObjects(groupList)
     if len(contiguousRegions) > 1:
-        saveDataToFileWithDescription(data=contiguousRegions,
-                                      censusYear='',
-                                      stateName='',
-                                      descriptionOfInfo='ErrorCase-GroupsAreNotContiguous')
+        save_data_to_file_with_description(data=contiguousRegions,
+                                           census_year='',
+                                           state_name='',
+                                           description_of_info='ErrorCase-GroupsAreNotContiguous')
         plotGraphObjectGroups(contiguousRegions,
                               showDistrictNeighborConnections=True)
         raise ValueError("Don't have a contiguous set of RedistrictingGroups. There are {0} distinct groups".format(
             len(contiguousRegions)))
 
 
-def createRedistrictingGroupsWithAtomicBlocksFromCensusData(censusData):
+def create_redistricting_groups_with_atomic_blocks_from_census_data(census_data):
     redistrictingGroupList = []
     tqdm.write('\n')
     tqdm.write('*** Creating Redistricting Groups from Census Data ***')
-    with tqdm(total=len(censusData)) as pbar:
-        for censusBlockDict in censusData:
+    with tqdm(total=len(census_data)) as pbar:
+        for censusBlockDict in census_data:
             redistrictingGroupWithCountyFIPS = getRedistrictingGroupWithCountyFIPS(censusBlockDict['county'],
                                                                                    redistrictingGroupList)
             if redistrictingGroupWithCountyFIPS is None:
@@ -809,7 +809,7 @@ def createRedistrictingGroupsWithAtomicBlocksFromCensusData(censusData):
     return redistrictingGroupList
 
 
-def prepareBlockGraphsForRedistrictingGroups(redistrictingGroupList, shouldRemoveWaterBlocks=True):
+def prepare_block_graphs_for_redistricting_groups(redistrictingGroupList, shouldRemoveWaterBlocks=True):
     if shouldRemoveWaterBlocks:
         # remove water blocks
         removeWaterBlocksFromRedistrictingGroups(redistrictingGroupList)
@@ -820,7 +820,7 @@ def prepareBlockGraphsForRedistrictingGroups(redistrictingGroupList, shouldRemov
     return redistrictingGroupList
 
 
-def prepareGraphsForRedistrictingGroups(redistrictingGroupList):
+def prepare_graphs_for_redistricting_groups(redistrictingGroupList):
     # split non-contiguous redistricting groups
     splitNonContiguousRedistrictingGroups(redistrictingGroupList)
 

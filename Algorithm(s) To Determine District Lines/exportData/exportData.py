@@ -22,9 +22,9 @@ def saveDataToDirectoryWithDescription(data, censusYear, stateName, descriptionO
         count += 1
 
 
-def saveDataToFileWithDescription(data, censusYear, stateName, descriptionOfInfo):
+def save_data_to_file_with_description(data, census_year, state_name, description_of_info):
     filePath = path.expanduser(
-        '~/Documents/{0}-{1}-{2}Info.redistdata'.format(censusYear, stateName, descriptionOfInfo))
+        '../results/algoData/{0}-{1}-{2}Info.redistdata'.format(census_year, state_name, description_of_info))
     saveDataToFile(data=data, filePath=filePath)
 
 
@@ -120,9 +120,9 @@ def loadDataFromDirectoryWithDescription(censusYear, stateName, descriptionOfInf
     return data
 
 
-def loadDataFromFileWithDescription(censusYear, stateName, descriptionOfInfo):
+def load_data_from_file_with_description(census_year, state_name, description_of_info):
     filePath = path.expanduser(
-        '~/Documents/{0}-{1}-{2}Info.redistdata'.format(censusYear, stateName, descriptionOfInfo))
+        '../results/algoData/{0}-{1}-{2}Info.redistdata'.format(census_year, state_name, description_of_info))
     return loadDataFromFile(filePath)
 
 

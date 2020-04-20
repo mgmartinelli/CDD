@@ -710,8 +710,8 @@ def snapPolygonToPolygon(polygonToSnap, referencePolygon, tolerance):
     return Polygon(coordinates)
 
 
-def populationDeviationFromPercent(overallPercentage, numberOfDistricts, totalPopulation):
-    idealDistrictSize = int(totalPopulation / numberOfDistricts)
-    populationDeviation = int((overallPercentage * idealDistrictSize) / 2)
+def population_deviation_from_percent(overall_percentage, number_of_districts, total_population):
+    idealDistrictSize = int(total_population / number_of_districts)
+    populationDeviation = int((overall_percentage * idealDistrictSize) / 2)
     populationDeviation = max(1, populationDeviation)
     return populationDeviation

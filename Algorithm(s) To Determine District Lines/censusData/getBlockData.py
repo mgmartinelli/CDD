@@ -5,7 +5,7 @@ from census import Census
 from esridump.dumper import EsriDumper
 from us import states
 
-from exportData.exportData import saveDataToFileWithDescription
+from exportData.exportData import save_data_to_file_with_description as save_data
 
 
 def get_counties_in_state(census_request, state_fips_code, max_number_of_counties=math.inf,
@@ -13,7 +13,6 @@ def get_counties_in_state(census_request, state_fips_code, max_number_of_countie
     requested_counties = census_request.sf1.get(fields='NAME',
                                                 geo={'for': 'county:*', 'in': 'state:{0}'.format(state_fips_code)})
 
-    # TODO: Clean up county names after API update
     requested_state = states.lookup(state_fips_code)
     state_name = requested_state.name
     for requested_county in requested_counties:
@@ -35,17 +34,17 @@ def get_counties_in_state(census_request, state_fips_code, max_number_of_countie
     return requested_counties
 
 
-def get_blocks_in_county(state_fips_code, county_fips_code):
+def get_blocks_in_county(state_fips_code, county_fips_code, census_request):
     # DEPRECATED: P0010001 is the total population as defined by: https://api.census.gov/data/2010/sf1/variables.html
     # The API now defaults to: https://api.census.gov/data/2010/dec/sf1/variables.html
     # Which now uses: P001001 for total population
-    county_blocks = censusRequest.sf1.get(fields='P001001',
-                                          geo={'for': 'block:*', 'in': 'state:{0} county:{1}'.format(
-                                              state_fips_code, county_fips_code)})
+    county_blocks = census_request.sf1.get(fields='P001001',
+                                           geo={'for': 'block:*', 'in': 'state:{0} county:{1}'.format(
+                                               state_fips_code, county_fips_code)})
     return county_blocks
 
 
-def get_all_blocks_in_state(county_list, max_number_of_counties=math.inf):
+def get_all_blocks_in_state(census_request, county_list, max_number_of_counties=math.inf):
     full_block_list = []
 
     # getting population counts and Block names for each county
@@ -55,7 +54,7 @@ def get_all_blocks_in_state(county_list, max_number_of_counties=math.inf):
         if count >= max_number_of_counties:
             break
         county_fips = county['county']
-        blocks_in_county = get_blocks_in_county(state_fips_code=county['state'], county_fips_code=county_fips)
+        blocks_in_county = get_blocks_in_county(county['state'], county_fips, census_request)
         full_block_list += blocks_in_county
         print('Got all blocks and population counts in {0}'.format(county['NAME']))
         count += 1
@@ -159,19 +158,14 @@ def all_geo_data_for_each_county(existing_county_data):
         return None
 
 
-def main(api_key, state_abbreviation, census_year=2010, description_to_work_with='All'):
-    state_info = states.lookup(state_abbreviation)
+def main(api_key, state_info, census_year=2010, description_to_work_with='All'):
     census_request = Census(api_key, year=census_year)
     county_info_list = get_counties_in_state(census_request, state_fips_code=state_info.fips)
-    all_county_geos_in_state = all_geo_data_for_each_county(existing_county_data=county_info_list)
 
-    # save county data to file
-    saveDataToFileWithDescription(data=all_county_geos_in_state, censusYear=census_year, stateName=state_info.name,
-                                  descriptionOfInfo='{0}County'.format(description_to_work_with))
-
-    all_blocks_in_state = get_all_blocks_in_state(county_list=county_info_list)
+    all_blocks_in_state = get_all_blocks_in_state(census_request=census_request, county_list=county_info_list)
     all_block_geos_in_state = all_geo_data_for_each_block(county_info_list=county_info_list,
                                                           existing_block_data=all_blocks_in_state)
-    # save block data to file
-    saveDataToFileWithDescription(data=all_block_geos_in_state, censusYear=census_year, stateName=state_info.name,
-                                  descriptionOfInfo='{0}Block'.format(description_to_work_with))
+
+    # Save block data to file
+    save_data(data=all_block_geos_in_state, census_year=census_year, state_name=state_info.name
+              , description_of_info='{0}Block'.format(description_to_work_with))

@@ -3,7 +3,7 @@ import gc
 from tqdm import tqdm
 from enum import Enum
 from exportData.displayShapes import plotGraphObjectGroups, plotDistrict
-from exportData.exportData import saveDataToFileWithDescription, loadDataFromFileWithDescription
+from exportData.exportData import save_data_to_file_with_description, load_data_from_file_with_description
 from formatData.atomicBlock import assignNeighborBlocksFromCandidateBlocks
 from formatData.blockBorderGraph import BlockBorderGraph
 from formatData.redistrictingGroup import validateContiguousRedistrictingGroups, RedistrictingGroup, \
@@ -48,52 +48,52 @@ class District(BlockBorderGraph):
 
         return startingGroupCandidates
 
-    def splitDistrict(self,
-                      numberOfDistricts,
-                      populationDeviation,
-                      weightingMethod,
-                      breakingMethod,
-                      totalSplitCount=None,
-                      shouldMergeIntoFormerRedistrictingGroups=False,
-                      shouldRefillEachPass=False,
-                      shouldDrawFillAttempts=False,
-                      shouldDrawEachStep=False,
-                      fastCalculations=True,
-                      showDetailedProgress=False,
-                      shouldSaveProgress=True):
-        if totalSplitCount is None:
-            tqdm.write('*** Splitting into {0} districts ***'.format(numberOfDistricts))
-            totalSplitCount = 0
+    def split_district(self,
+                       number_of_districts,
+                       population_deviation,
+                       weighting_method,
+                       breaking_method,
+                       total_split_count=None,
+                       should_merge_into_former_redistricting_groups=False,
+                       should_refill_each_pass=False,
+                       should_draw_fill_attempts=False,
+                       should_draw_each_step=False,
+                       fast_calculations=True,
+                       show_detailed_progress=False,
+                       should_save_progress=True):
+        if total_split_count is None:
+            tqdm.write('*** Splitting into {0} districts ***'.format(number_of_districts))
+            total_split_count = 0
 
         districts = []
 
-        if numberOfDistricts == 1:
+        if number_of_districts == 1:
             return [self]
 
-        aRatio = math.floor(numberOfDistricts / 2)
-        bRatio = math.ceil(numberOfDistricts / 2)
+        aRatio = math.floor(number_of_districts / 2)
+        bRatio = math.ceil(number_of_districts / 2)
         ratio = (aRatio, bRatio)
 
         districtSplitScores = []
         thisSplitCount = 0
-        originalBreakingMethod = breakingMethod
+        originalBreakingMethod = breaking_method
         fillOriginDirection = None
         doneFindingSplits = False
         while not doneFindingSplits:
-            tqdm.write('   *** Split starting. Using {0} and {1} ***'.format(weightingMethod, breakingMethod))
+            tqdm.write('   *** Split starting. Using {0} and {1} ***'.format(weighting_method, breaking_method))
 
             cutDistrictInfo = self.cutDistrictIntoExactRatio(ratio=ratio,
-                                                             populationDeviation=populationDeviation,
-                                                             weightingMethod=weightingMethod,
-                                                             breakingMethod=breakingMethod,
+                                                             populationDeviation=population_deviation,
+                                                             weightingMethod=weighting_method,
+                                                             breakingMethod=breaking_method,
                                                              fillOriginDirection=fillOriginDirection,
-                                                             shouldDrawFillAttempts=shouldDrawFillAttempts,
-                                                             shouldDrawEachStep=shouldDrawEachStep,
-                                                             shouldMergeIntoFormerRedistrictingGroups=shouldMergeIntoFormerRedistrictingGroups,
-                                                             shouldRefillEachPass=shouldRefillEachPass,
-                                                             fastCalculations=fastCalculations,
-                                                             showDetailedProgress=showDetailedProgress,
-                                                             shouldSaveProgress=shouldSaveProgress)
+                                                             shouldDrawFillAttempts=should_draw_fill_attempts,
+                                                             shouldDrawEachStep=should_draw_each_step,
+                                                             shouldMergeIntoFormerRedistrictingGroups=should_merge_into_former_redistricting_groups,
+                                                             shouldRefillEachPass=should_refill_each_pass,
+                                                             fastCalculations=fast_calculations,
+                                                             showDetailedProgress=show_detailed_progress,
+                                                             shouldSaveProgress=should_save_progress)
             cutDistrict = cutDistrictInfo[0]
             fillOriginDirection = cutDistrictInfo[1]
             thisSplitCount += 1
@@ -119,11 +119,11 @@ class District(BlockBorderGraph):
                 if isBGood:
                     splitScore += 1
 
-                saveDescription = 'SplitCandidate-{0}-{1}-{2}-'.format(id(self), fillOriginDirection, breakingMethod)
-                saveDataToFileWithDescription(data=[aDistrictCandidate, bDistrictCandidate],
-                                              censusYear='',
-                                              stateName='',
-                                              descriptionOfInfo=saveDescription)
+                saveDescription = 'SplitCandidate-{0}-{1}-{2}-'.format(id(self), fillOriginDirection, breaking_method)
+                save_data_to_file_with_description(data=[aDistrictCandidate, bDistrictCandidate],
+                                                   census_year='',
+                                                   state_name='',
+                                                   description_of_info=saveDescription)
                 saveGeometry = (saveDescription,
                                 aDistrictCandidate.geometry,
                                 bDistrictCandidate.geometry,
@@ -136,14 +136,14 @@ class District(BlockBorderGraph):
                                             'splitScore': splitScore,
                                             'fillOriginDirection': fillOriginDirection,
                                             'minimumPolsbyPopperScore': minimumPolsbyPopperScore,
-                                            'breakingMethod': breakingMethod,
+                                            'breaking_method': breaking_method,
                                             'geometryInfo': saveGeometry})
 
                 if splitScore is 2:
                     doneFindingSplits = True
                 else:
                     tqdm.write('   *** One or more split candidates is not a good shape! Trying again. ***')
-                    if shouldMergeIntoFormerRedistrictingGroups:
+                    if should_merge_into_former_redistricting_groups:
                         tqdm.write('      *** Merging district into starting groups ***')
                         redistrictingGroupsInDistrict = cutDistrict[0] + cutDistrict[1]
                         mergedRedistrictingGroups = mergeCandidatesIntoPreviousGroups(
@@ -156,7 +156,7 @@ class District(BlockBorderGraph):
                         self.children = mergedRedistrictingGroups
 
             splitScoresWithCurrentBreakingMethod = [districtSplitScore for districtSplitScore in districtSplitScores
-                                                    if districtSplitScore['breakingMethod'] is breakingMethod]
+                                                    if districtSplitScore['breaking_method'] is breaking_method]
             fillOriginDirection = getOppositeDirection(fillOriginDirection)
             directionsTried = [districtSplitScore['fillOriginDirection']
                                for districtSplitScore in splitScoresWithCurrentBreakingMethod]
@@ -165,62 +165,62 @@ class District(BlockBorderGraph):
                 if fillOriginDirection in directionsTried:
                     fillOriginDirection = getOppositeDirection(fillOriginDirection)
                     if fillOriginDirection in directionsTried:
-                        if breakingMethod is BreakingMethod.splitLowestRelativeEnergySeam or breakingMethod is BreakingMethod.splitLowestEnergySeam:
-                            breakingMethod = BreakingMethod.splitGroupsOnEdge
+                        if breaking_method is BreakingMethod.splitLowestRelativeEnergySeam or breaking_method is BreakingMethod.splitLowestEnergySeam:
+                            breaking_method = BreakingMethod.splitGroupsOnEdge
                         else:
                             doneFindingSplits = True
 
         districtSplitScores.sort(key=lambda x: x['minimumPolsbyPopperScore'], reverse=True)
-        saveDataToFileWithDescription(data=districtSplitScores,
-                                      censusYear='',
-                                      stateName='',
-                                      descriptionOfInfo='DistrictSplitScores-{0}'.format(id(self)))
+        save_data_to_file_with_description(data=districtSplitScores,
+                                           census_year='',
+                                           state_name='',
+                                           description_of_info='DistrictSplitScores-{0}'.format(id(self)))
         bestDistrictSplitInfo = districtSplitScores[0]
         bestDistrictSaveDescription = bestDistrictSplitInfo['saveDescription']
         if bestDistrictSaveDescription is None:
             plotDistrict(self, showDistrictNeighborConnections=True)
             raise RuntimeError("Could not find a good split for {0} from list: {1}".format(id(self),
                                                                                            districtSplitScores))
-        bestDistrictSplit = loadDataFromFileWithDescription(censusYear='',
-                                                            stateName='',
-                                                            descriptionOfInfo=bestDistrictSaveDescription)
+        bestDistrictSplit = load_data_from_file_with_description(census_year='',
+                                                                 state_name='',
+                                                                 description_of_info=bestDistrictSaveDescription)
         aDistrict = bestDistrictSplit[0]
         bDistrict = bestDistrictSplit[1]
         bestSplitScore = bestDistrictSplitInfo['splitScore']
         bestFillDirection = bestDistrictSplitInfo['fillOriginDirection']
         bestPolsbyPopperScore = bestDistrictSplitInfo['minimumPolsbyPopperScore']
-        bestBreakingMethod = bestDistrictSplitInfo['breakingMethod']
+        bestBreakingMethod = bestDistrictSplitInfo['breaking_method']
         tqdm.write('   *** Chose a district split! Ratio: {0}***'.format(ratio))
         tqdm.write('   *** Direction: {0} Split score: {1} Polsby-Popper score: {2} Breaking method: {3} ***'
                    .format(bestFillDirection, bestSplitScore, bestPolsbyPopperScore, bestBreakingMethod))
-        totalSplitCount += 1
+        total_split_count += 1
 
-        aDistrictSplits = aDistrict.splitDistrict(numberOfDistricts=aRatio,
-                                                  populationDeviation=populationDeviation,
-                                                  weightingMethod=weightingMethod,
-                                                  breakingMethod=originalBreakingMethod,
-                                                  totalSplitCount=totalSplitCount,
-                                                  shouldMergeIntoFormerRedistrictingGroups=shouldMergeIntoFormerRedistrictingGroups,
-                                                  shouldRefillEachPass=shouldRefillEachPass,
-                                                  shouldDrawFillAttempts=shouldDrawFillAttempts,
-                                                  shouldDrawEachStep=shouldDrawEachStep,
-                                                  fastCalculations=fastCalculations,
-                                                  showDetailedProgress=showDetailedProgress,
-                                                  shouldSaveProgress=shouldSaveProgress)
+        aDistrictSplits = aDistrict.split_district(number_of_districts=aRatio,
+                                                   population_deviation=population_deviation,
+                                                   weighting_method=weighting_method,
+                                                   breaking_method=originalBreakingMethod,
+                                                   total_split_count=total_split_count,
+                                                   should_merge_into_former_redistricting_groups=should_merge_into_former_redistricting_groups,
+                                                   should_refill_each_pass=should_refill_each_pass,
+                                                   should_draw_fill_attempts=should_draw_fill_attempts,
+                                                   should_draw_each_step=should_draw_each_step,
+                                                   fast_calculations=fast_calculations,
+                                                   show_detailed_progress=show_detailed_progress,
+                                                   should_save_progress=should_save_progress)
         districts.extend(aDistrictSplits)
 
-        bDistrictSplits = bDistrict.splitDistrict(numberOfDistricts=bRatio,
-                                                  populationDeviation=populationDeviation,
-                                                  weightingMethod=weightingMethod,
-                                                  breakingMethod=originalBreakingMethod,
-                                                  totalSplitCount=totalSplitCount,
-                                                  shouldMergeIntoFormerRedistrictingGroups=shouldMergeIntoFormerRedistrictingGroups,
-                                                  shouldRefillEachPass=shouldRefillEachPass,
-                                                  shouldDrawFillAttempts=shouldDrawFillAttempts,
-                                                  shouldDrawEachStep=shouldDrawEachStep,
-                                                  fastCalculations=fastCalculations,
-                                                  showDetailedProgress=showDetailedProgress,
-                                                  shouldSaveProgress=shouldSaveProgress)
+        bDistrictSplits = bDistrict.split_district(number_of_districts=bRatio,
+                                                   population_deviation=population_deviation,
+                                                   weighting_method=weighting_method,
+                                                   breaking_method=originalBreakingMethod,
+                                                   total_split_count=total_split_count,
+                                                   should_merge_into_former_redistricting_groups=should_merge_into_former_redistricting_groups,
+                                                   should_refill_each_pass=should_refill_each_pass,
+                                                   should_draw_fill_attempts=should_draw_fill_attempts,
+                                                   should_draw_each_step=should_draw_each_step,
+                                                   fast_calculations=fast_calculations,
+                                                   show_detailed_progress=show_detailed_progress,
+                                                   should_save_progress=should_save_progress)
         districts.extend(bDistrictSplits)
 
         return districts
@@ -303,12 +303,12 @@ class District(BlockBorderGraph):
                     breakupCandidates = [breakupCandidate for breakupCandidate in breakupCandidates
                                          if len(breakupCandidate.children) > 1]
                     if len(breakupCandidates) == 0:
-                        saveDataToFileWithDescription(data=[self, districtAStartingGroup, ratio,
-                                                            candidateDistrictA, candidateDistrictB,
-                                                            nextBestGroupForCandidateDistrictA, breakupCandidates],
-                                                      censusYear='',
-                                                      stateName='',
-                                                      descriptionOfInfo='ErrorCase-NoGroupsCandidatesCapableOfBreaking')
+                        save_data_to_file_with_description(data=[self, districtAStartingGroup, ratio,
+                                                                 candidateDistrictA, candidateDistrictB,
+                                                                 nextBestGroupForCandidateDistrictA, breakupCandidates],
+                                                           census_year='',
+                                                           state_name='',
+                                                           description_of_info='ErrorCase-NoGroupsCandidatesCapableOfBreaking')
 
                         tqdm.write(
                             '   *** Failed fill attempt!!! *** <------------------------------------------------------')
@@ -343,12 +343,12 @@ class District(BlockBorderGraph):
                 groupsCapableOfBreaking = [groupToBreakUp for groupToBreakUp in groupsToBreakUp
                                            if len(groupToBreakUp[0].children) > 1]
                 if len(groupsCapableOfBreaking) == 0:
-                    saveDataToFileWithDescription(data=[self, districtAStartingGroup, ratio,
-                                                        candidateDistrictA, candidateDistrictB,
-                                                        nextBestGroupForCandidateDistrictA],
-                                                  censusYear='',
-                                                  stateName='',
-                                                  descriptionOfInfo='ErrorCase-NoGroupsCapableOfBreaking')
+                    save_data_to_file_with_description(data=[self, districtAStartingGroup, ratio,
+                                                             candidateDistrictA, candidateDistrictB,
+                                                             nextBestGroupForCandidateDistrictA],
+                                                       census_year='',
+                                                       state_name='',
+                                                       description_of_info='ErrorCase-NoGroupsCapableOfBreaking')
                     plotGraphObjectGroups([self.children, districtAStartingGroup])
                     raise RuntimeError("Groups to break up don't meet criteria. Groups: {0}".format(
                         [groupToBreakUp[0].graphId for groupToBreakUp in groupsToBreakUp]
@@ -409,10 +409,10 @@ class District(BlockBorderGraph):
 
             if shouldSaveProgress:
                 if shouldSaveThisPass:
-                    saveDataToFileWithDescription(data=(self, candidateDistrictA, ratio, fillOriginDirection),
-                                                  censusYear='',
-                                                  stateName='',
-                                                  descriptionOfInfo='DistrictSplitLastIteration-{0}'.format(id(self)))
+                    save_data_to_file_with_description(data=(self, candidateDistrictA, ratio, fillOriginDirection),
+                                                       census_year='',
+                                                       state_name='',
+                                                       description_of_info='DistrictSplitLastIteration-{0}'.format(id(self)))
             count += 1
 
         if shouldMergeIntoFormerRedistrictingGroups:
@@ -529,8 +529,8 @@ class District(BlockBorderGraph):
                 candidateDistrictB), nextBestGroupFromCandidateDistrictA, fillOriginDirection, startingObjects
 
 
-def createDistrictFromRedistrictingGroups(redistrictingGroups):
-    initialDistrict = District(childrenGroups=redistrictingGroups)
+def create_district_from_redistricting_groups(redistricting_groups):
+    initialDistrict = District(childrenGroups=redistricting_groups)
     return initialDistrict
 
 
@@ -679,11 +679,11 @@ def splitLowestEnergySeam(candidateDistrictA, candidateDistrictB,
                         "      *** Warning: Couldn't find a split for {0}. Candidate for Force Splitting. {1} blocks. {2} total pop.".format(
                             groupToEvaluate.graphId, len(groupToEvaluate.children),
                             groupToEvaluate.population))
-                    saveDataToFileWithDescription(data=groupToEvaluate,
-                                                  censusYear='',
-                                                  stateName='',
-                                                  descriptionOfInfo='WarningCase-ForceSplittingWithOver10Children-{0}'
-                                                  .format(id(groupToEvaluate)))
+                    save_data_to_file_with_description(data=groupToEvaluate,
+                                                       census_year='',
+                                                       state_name='',
+                                                       description_of_info='WarningCase-ForceSplittingWithOver10Children-{0}'
+                                                       .format(id(groupToEvaluate)))
             else:
                 if oppositePolygonSplitResultType is SplitType.ForceSplitAllBlocks:
                     # will need to remove any other seams in list if we ever take

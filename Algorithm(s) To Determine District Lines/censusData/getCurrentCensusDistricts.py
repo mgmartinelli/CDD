@@ -1,7 +1,7 @@
 from us import states
 from esridump.dumper import EsriDumper
 from censusData.existingDistrict import ExistingDistrict
-from exportData.exportData import saveDataToFileWithDescription, saveGeoJSONToDirectoryWithDescription
+from exportData.exportData import save_data_to_file_with_description, saveGeoJSONToDirectoryWithDescription
 
 
 def getAllGeoDataForFederalCongressionalDistricts(stateFIPSCode):
@@ -27,10 +27,10 @@ descriptionToWorkWith = 'All'
 
 allCongressionalDistrictGeosInState = getAllGeoDataForFederalCongressionalDistricts(stateFIPSCode=stateInfo.fips)
 # save county data to file
-saveDataToFileWithDescription(data=allCongressionalDistrictGeosInState,
-                              censusYear=censusYear,
-                              stateName=stateInfo.name,
-                              descriptionOfInfo='{0}CurrentFederalCongressionalDistricts'.format(descriptionToWorkWith))
+save_data_to_file_with_description(data=allCongressionalDistrictGeosInState,
+                                   census_year=censusYear,
+                                   state_name=stateInfo.name,
+                                   description_of_info='{0}CurrentFederalCongressionalDistricts'.format(descriptionToWorkWith))
 saveGeoJSONToDirectoryWithDescription(geographyList=allCongressionalDistrictGeosInState,
                                       censusYear=censusYear,
                                       stateName=stateInfo.name,

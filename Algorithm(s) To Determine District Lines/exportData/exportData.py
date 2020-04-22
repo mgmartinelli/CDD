@@ -73,7 +73,6 @@ def saveGeoJSONToDirectoryWithDescription(geographyList, censusYear, stateName, 
 def save_geojson_to_results(geography_list, state_name):
     # get number of voting booths for each district
     voting_booths = get_num_voting_booths(geography_list)
-    print(voting_booths)
 
     geojson_objects = []
     district_populations = []

@@ -8,11 +8,11 @@ from exportData.exportData import save_geojson_to_results as save_geojson
 
 def main():
     api_key = "78ae8c422513eb7551e52f2adf65ee6b51847b9d"
-    state_abbreviation = 'RI'
+    state_abbreviation = 'DE'
     state_info = states.lookup(state_abbreviation)
 
-    get_block_data(api_key, state_info)
-    format_block_data(state_info)
+    #get_block_data(api_key, state_info)
+    #format_block_data(state_info)
 
     num_congressional_districts = get_num_congressional_districts(api_key, state_info)
     districts = create_districts(state_info, num_congressional_districts, 0.03)

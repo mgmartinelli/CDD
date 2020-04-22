@@ -4,7 +4,6 @@ import pickle
 import sys
 
 import pandas as pd
-from dataclasses import dataclass
 
 from collections import OrderedDict
 from os import path, makedirs

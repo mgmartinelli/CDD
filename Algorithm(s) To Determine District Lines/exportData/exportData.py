@@ -121,6 +121,7 @@ def save_geojson_to_results(geography_list, state_name):
 def get_num_voting_booths(geography_list):
 
     voting_booths = []
+    count = 0
 
     #create polygon
     for geography in geography_list:
@@ -146,7 +147,9 @@ def get_num_voting_booths(geography_list):
             #print("\n\nPoint: ", point, "\n\n")
 
             if (exterior_polygon.contains(point)):
-                voting_booths[i] = num_booths + 1
+                voting_booths[count] = num_booths + 1
+
+        count=count+1
 
     return voting_booths
 

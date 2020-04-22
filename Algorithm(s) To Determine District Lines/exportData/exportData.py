@@ -143,10 +143,10 @@ def get_num_voting_booths(geography_list):
         for i in range(len(df)):
             point = Point(((df["X"]).iloc[i]), ((df["Y"]).iloc[i]))
 
-            print("\n\nPoint: ", point, "\n\n")
+            #print("\n\nPoint: ", point, "\n\n")
 
             if (exterior_polygon.contains(point)):
-                voting_booths[0] = num_booths + 1
+                voting_booths[i] = num_booths + 1
 
     return voting_booths
 

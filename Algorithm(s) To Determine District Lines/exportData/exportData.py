@@ -71,10 +71,9 @@ def saveGeoJSONToDirectoryWithDescription(geographyList, censusYear, stateName, 
 
 
 def save_geojson_to_results(geography_list, state_name):
-
-    voting_booths = []
-
+    # get number of voting booths for each district
     voting_booths = get_num_voting_booths(geography_list)
+    print(voting_booths)
 
     geojson_objects = []
     district_populations = []
@@ -104,7 +103,8 @@ def save_geojson_to_results(geography_list, state_name):
                 'id': '{0:0=2d}'.format(num_results_so_far + 1),
                 'properties': {
                     'name': '{0} {1:0=2d}'.format(state_name, district_num + 1),
-                    'population': district_populations[district_num]
+                    'population': district_populations[district_num],
+                    'num_voting_booths': voting_booths[district_num]
                 },
                 'geometry': json.loads(json_string)
             }
@@ -137,19 +137,18 @@ def get_num_voting_booths(geography_list):
         # each column of the col_list will be filled with corresponding data
         df = pd.read_csv("Public_School_Locations_201516.csv", usecols=col_list)
 
+        #initialize list
+        voting_booths.append(0)
 
-        #Create shapely point based on public school coordinates and check to see if point is contained in current polygon
+        #Create shapely point based on public school coordinates and check to see if point is contained in polygon
         #increment the number of voting booths by the number of points that lie in the polygon
-        num_booths = 0
         for i in range(len(df)):
             point = Point(((df["X"]).iloc[i]), ((df["Y"]).iloc[i]))
 
-            #print("\n\nPoint: ", point, "\n\n")
-
             if (exterior_polygon.contains(point)):
-                voting_booths[count] = num_booths + 1
+                voting_booths[count] = voting_booths[count] + 1
 
-        count=count+1
+        count = count+1
 
     return voting_booths
 

@@ -2,10 +2,14 @@ import glob
 import json
 import pickle
 import sys
+
+import pandas as pd
+from dataclasses import dataclass
+
 from collections import OrderedDict
 from os import path, makedirs
 
-from shapely.geometry import Polygon, MultiPolygon
+from shapely.geometry import Polygon, MultiPolygon, Point
 from tqdm import tqdm
 
 from geographyHelper import shapelyGeometryToGeoJSON
@@ -67,6 +71,11 @@ def saveGeoJSONToDirectoryWithDescription(geographyList, censusYear, stateName, 
 
 
 def save_geojson_to_results(geography_list, state_name):
+
+    voting_booths = []
+
+    voting_booths = get_num_voting_booths(geography_list)
+
     geojson_objects = []
     district_populations = []
     for geography in geography_list:
@@ -108,6 +117,38 @@ def save_geojson_to_results(geography_list, state_name):
         json_file.seek(0)
         json.dump(results_so_far, json_file)
         json_file.truncate()
+
+def get_num_voting_booths(geography_list):
+
+    voting_booths = []
+
+    #create polygon
+    for geography in geography_list:
+        if type(geography.geometry) is MultiPolygon:
+            exteriors = [Polygon(polygon.exterior) for polygon in geography.geometry]
+            exterior_polygon = MultiPolygon(exteriors)
+        else:
+            exterior_polygon = Polygon(geography.geometry.exterior)
+
+        # List of each of the columns in the csv file
+        col_list = ["X","Y","OBJECTID","NCESSCH","NAME","OPSTFIPS","LSTREE","LCITY","LSTATE","LZIP","LZIP4","STFIP15","CNTY15","NMCNTY15","LOCALE15","LAT1516","LON1516","CBSA15","NMCBSA15","CBSATYPE15","CSA15","NMCSA15","NECTA15","NMNECTA15","CD15","SLDL15","SLDU15"]
+        # read each line in the csv file
+        # each column of the col_list will be filled with corresponding data
+        df = pd.read_csv("Public_School_Locations_201516.csv", usecols=col_list)
+
+
+        #Create shapely point based on public school coordinates and check to see if point is contained in current polygon
+        #increment the number of voting booths by the number of points that lie in the polygon
+        num_booths = 0
+        for i in range(len(df)):
+            point = Point(((df["X"]).iloc[i]), ((df["Y"]).iloc[i]))
+
+            print("\n\nPoint: ", point, "\n\n")
+
+            if (exterior_polygon.contains(point)):
+                voting_booths[0] = num_booths + 1
+
+    return voting_booths
 
 
 def loadDataFromDirectoryWithDescription(censusYear, stateName, descriptionOfInfo):

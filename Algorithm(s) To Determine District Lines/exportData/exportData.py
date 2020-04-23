@@ -87,16 +87,15 @@ def save_geojson_to_results(geography_list, state_name):
         geojson_objects.append(exterior_json)
         district_populations.append(district_pop)
 
-    with open('../results/us-states-population-emphasis.json', 'r+') as json_file:
+    with open('../results/{0}_Results.json'.format(state_name.abbr), 'w+') as json_file:
         # Load current results
-        results_so_far = json.load(json_file)
-        num_results_so_far = len(results_so_far["features"])
+        results_so_far = []
 
         district_num = 0
         for json_string in geojson_objects:
             new_district = {
                 'type': 'Feature',
-                'id': '{0:0=2d}'.format(num_results_so_far + 1),
+                'id': '{0}{1:0=2d}'.format(state_name.fips, district_num + 1),
                 'properties': {
                     'name': '{0} {1:0=2d}'.format(state_name, district_num + 1),
                     'population': district_populations[district_num],
@@ -105,8 +104,7 @@ def save_geojson_to_results(geography_list, state_name):
                 'geometry': json.loads(json_string)
             }
 
-            results_so_far["features"].append(new_district)
-            num_results_so_far += 1
+            results_so_far.append(new_district)
             district_num += 1
 
         # Overwrite file contents
@@ -128,21 +126,23 @@ def get_num_voting_booths(geography_list):
             exterior_polygon = Polygon(geography.geometry.exterior)
 
         # List of each of the columns in the public school csv file
-        school_col_list = ["X", "Y", "OBJECTID", "NCESSCH", "NAME", "OPSTFIPS", "LSTREE", "LCITY", "LSTATE", "LZIP", "LZIP4",
-                    "STFIP15", "CNTY15", "NMCNTY15", "LOCALE15", "LAT1516", "LON1516", "CBSA15", "NMCBSA15",
-                    "CBSATYPE15", "CSA15", "NMCSA15", "NECTA15", "NMNECTA15", "CD15", "SLDL15", "SLDU15"]
+        school_col_list = ["X", "Y", "OBJECTID", "NCESSCH", "NAME", "OPSTFIPS", "LSTREE", "LCITY", "LSTATE", "LZIP",
+                           "LZIP4",
+                           "STFIP15", "CNTY15", "NMCNTY15", "LOCALE15", "LAT1516", "LON1516", "CBSA15", "NMCBSA15",
+                           "CBSATYPE15", "CSA15", "NMCSA15", "NECTA15", "NMNECTA15", "CD15", "SLDL15", "SLDU15"]
         # read each line in the csv file
         # each column of the col_list will be filled with corresponding data
-        school_file = pd.read_csv("../Polling Locations CSV files/Public_School_Locations_201516.csv", usecols=school_col_list)
-
+        school_file = pd.read_csv("../Polling Locations CSV files/Public_School_Locations_201516.csv",
+                                  usecols=school_col_list)
 
         # List of each of the columns in the public library csv file
-        lib_col_list = ["Location Number","Location Name","Location Type","Address","City","State","Zip Code","Phone Number",
-                        "County","Latitude","Longitude","Accuracy"]
+        lib_col_list = ["Location Number", "Location Name", "Location Type", "Address", "City", "State", "Zip Code",
+                        "Phone Number",
+                        "County", "Latitude", "Longitude", "Accuracy"]
         # read each line in the csv file
         # each column of the col_list will be filled with corresponding data
         lib_file = pd.read_csv("../Polling Locations CSV files/public_libraries.csv",
-                                  usecols=lib_col_list)
+                               usecols=lib_col_list)
 
         # initialize list
         voting_booths.append(0)
@@ -155,13 +155,11 @@ def get_num_voting_booths(geography_list):
             if exterior_polygon.contains(point):
                 voting_booths[count] = voting_booths[count] + 1
 
-
         for i in range(len(lib_file)):
             point = Point(((lib_file["Longitude"]).iloc[i]), ((lib_file["Latitude"]).iloc[i]))
 
             if exterior_polygon.contains(point):
                 voting_booths[count] = voting_booths[count] + 1
-
 
         count = count + 1
 

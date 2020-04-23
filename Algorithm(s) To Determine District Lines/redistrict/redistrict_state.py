@@ -6,9 +6,8 @@ from redistrict.createDistricts import main as create_districts
 from exportData.exportData import save_geojson_to_results as save_geojson
 
 
-def main():
+def main(state_abbreviation):
     api_key = "78ae8c422513eb7551e52f2adf65ee6b51847b9d"
-    state_abbreviation = 'DE'
     state_info = states.lookup(state_abbreviation)
 
     # get_block_data(api_key, state_info)
@@ -19,4 +18,8 @@ def main():
     save_geojson(districts, state_info)
 
 
-main()
+# TODO: Change the contents of this list to include your assigned state abbreviations
+state_list = ['RI']
+
+for state in state_list:
+    main(state)

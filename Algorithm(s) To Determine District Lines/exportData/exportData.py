@@ -118,6 +118,7 @@ def save_geojson_to_results(geography_list, state_name):
 def get_num_voting_booths(geography_list):
     voting_booths = []
     count = 0
+
     # create polygon
     for geography in geography_list:
         if type(geography.geometry) is MultiPolygon:

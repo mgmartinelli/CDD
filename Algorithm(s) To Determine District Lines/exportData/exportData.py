@@ -24,15 +24,18 @@ def saveDataToDirectoryWithDescription(data, censusYear, stateName, descriptionO
 
 
 def save_data_to_file_with_description(data, census_year, state_name, description_of_info):
-    filePath = path.expanduser(
+    directory_path = path.expanduser('../results/algoData')
+    if not path.exists(directory_path):
+        makedirs(directory_path)
+    file_path = path.expanduser(
         '../results/algoData/{0}-{1}-{2}Info.redistdata'.format(census_year, state_name, description_of_info))
-    saveDataToFile(data=data, filePath=filePath)
+    saveDataToFile(data=data, filePath=file_path)
 
 
 def saveDataToFile(data, filePath):
     tqdm.write('*** Attempting to save: {0} ***'.format(filePath))
     sys.setrecursionlimit(100000)
-    with open(filePath, 'wb') as file:
+    with open(filePath, 'w+b') as file:
         pickle.dump(data, file, protocol=pickle.HIGHEST_PROTOCOL)
     tqdm.write('*** Saved: {0} ***'.format(filePath))
 

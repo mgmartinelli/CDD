@@ -7,9 +7,11 @@ import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+# Homepage view
 def home_view(request, *args, **kwargs):
 	return render(request, "home.html")
 
+# Map view of the districts
 def map_view(request, state, *args, **kwargs):
 	f = open('static/state_locations/state-locations.json') 
 	data = json.load(f) 
@@ -17,9 +19,10 @@ def map_view(request, state, *args, **kwargs):
 	lat = data[state]["Lat"]
 	lon = data[state]["Lon"]
 
-	# all views will be linked to an actual HTML file when the project gets bigger
 	return render(request, "map_view.html", {'state': state, 'lat': lat, 'lon': lon})
 
+
+# Rest API to host JSON data for each state
 class RestDashboardDistrictData(APIView):
 
     authentication_classes = []
@@ -27,7 +30,6 @@ class RestDashboardDistrictData(APIView):
 
     def get(self, request, state, format=None):
         
-        # Opening data from JSON file for development speed
         json_response = []
         filename = f'static/results/{state}_Results.json'
         with open(filename, 'r') as f:

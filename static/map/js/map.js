@@ -88,7 +88,7 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4> Maryland Districts</h4>' +  (props ?
+    this._div.innerHTML = '<h4>' + US_state + ' Districts</h4>' +  (props ?
         '<b> District: </b>' + props.name.substring(props.name.length-2, props.name.length) + '<br />' + '<b> Population: </b>' + props.population + '</br><b> Voting Booths: </b>' + props.num_voting_booths
         : 'Hover over a state');
 };

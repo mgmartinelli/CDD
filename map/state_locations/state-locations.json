@@ -1,0 +1,257 @@
+{
+   "AL": {
+      "State": "Alabama",
+      "Lat": 32.806671,
+      "Lon": -86.79113
+   },
+   "AK": {
+      "State": "Alaska",
+      "Lat": 61.370716,
+      "Lon": -152.404419
+   },
+   "AZ": {
+      "State": "Arizona",
+      "Lat": 33.729759,
+      "Lon": -111.431221
+   },
+   "AR": {
+      "State": "Arkansas",
+      "Lat": 34.969704,
+      "Lon": -92.373123
+   },
+   "CA": {
+      "State": "California",
+      "Lat": 36.116203,
+      "Lon": -119.681564
+   },
+   "CO": {
+      "State": "Colorado",
+      "Lat": 39.059811,
+      "Lon": -105.311104
+   },
+   "CT": {
+      "State": "Connecticut",
+      "Lat": 41.597782,
+      "Lon": -72.755371
+   },
+   "DE": {
+      "State": "Delaware",
+      "Lat": 39.318523,
+      "Lon": -75.507141
+   },
+   "DC": {
+      "State": "District of Columbia",
+      "Lat": 38.897438,
+      "Lon": -77.026817
+   },
+   "FL": {
+      "State": "Florida",
+      "Lat": 27.766279,
+      "Lon": -81.686783
+   },
+   "GA": {
+      "State": "Georgia",
+      "Lat": 33.040619,
+      "Lon": -83.643074
+   },
+   "HI": {
+      "State": "Hawaii",
+      "Lat": 21.094318,
+      "Lon": -157.498337
+   },
+   "ID": {
+      "State": "Idaho",
+      "Lat": 44.240459,
+      "Lon": -114.478828
+   },
+   "IL": {
+      "State": "Illinois",
+      "Lat": 40.349457,
+      "Lon": -88.986137
+   },
+   "IN": {
+      "State": "Indiana",
+      "Lat": 39.849426,
+      "Lon": -86.258278
+   },
+   "IA": {
+      "State": "Iowa",
+      "Lat": 42.011539,
+      "Lon": -93.210526
+   },
+   "KS": {
+      "State": "Kansas",
+      "Lat": 38.5266,
+      "Lon": -96.726486
+   },
+   "KY": {
+      "State": "Kentucky",
+      "Lat": 37.66814,
+      "Lon": -84.670067
+   },
+   "LA": {
+      "State": "Louisiana",
+      "Lat": 31.169546,
+      "Lon": -91.867805
+   },
+   "ME": {
+      "State": "Maine",
+      "Lat": 44.693947,
+      "Lon": -69.381927
+   },
+   "MD": {
+      "State": "Maryland",
+      "Lat": 39.063946,
+      "Lon": -76.802101
+   },
+   "MA": {
+      "State": "Massachusetts",
+      "Lat": 42.230171,
+      "Lon": -71.530106
+   },
+   "MI": {
+      "State": "Michigan",
+      "Lat": 43.326618,
+      "Lon": -84.536095
+   },
+   "MN": {
+      "State": "Minnesota",
+      "Lat": 45.694454,
+      "Lon": -93.900192
+   },
+   "MS": {
+      "State": "Mississippi",
+      "Lat": 32.741646,
+      "Lon": -89.678696
+   },
+   "MO": {
+      "State": "Missouri",
+      "Lat": 38.456085,
+      "Lon": -92.288368
+   },
+   "MT": {
+      "State": "Montana",
+      "Lat": 46.921925,
+      "Lon": -110.454353
+   },
+   "NE": {
+      "State": "Nebraska",
+      "Lat": 41.12537,
+      "Lon": -98.268082
+   },
+   "NV": {
+      "State": "Nevada",
+      "Lat": 38.313515,
+      "Lon": -117.055374
+   },
+   "NH": {
+      "State": "New Hampshire",
+      "Lat": 43.452492,
+      "Lon": -71.563896
+   },
+   "NJ": {
+      "State": "New Jersey",
+      "Lat": 40.298904,
+      "Lon": -74.521011
+   },
+   "NM": {
+      "State": "New Mexico",
+      "Lat": 34.840515,
+      "Lon": -106.248482
+   },
+   "NY": {
+      "State": "New York",
+      "Lat": 42.165726,
+      "Lon": -74.948051
+   },
+   "NC": {
+      "State": "North Carolina",
+      "Lat": 35.630066,
+      "Lon": -79.806419
+   },
+   "ND": {
+      "State": "North Dakota",
+      "Lat": 47.528912,
+      "Lon": -99.784012
+   },
+   "OH": {
+      "State": "Ohio",
+      "Lat": 40.388783,
+      "Lon": -82.764915
+   },
+   "OK": {
+      "State": "Oklahoma",
+      "Lat": 35.565342,
+      "Lon": -96.928917
+   },
+   "OR": {
+      "State": "Oregon",
+      "Lat": 44.572021,
+      "Lon": -122.070938
+   },
+   "PA": {
+      "State": "Pennsylvania",
+      "Lat": 40.590752,
+      "Lon": -77.209755
+   },
+   "RI": {
+      "State": "Rhode Island",
+      "Lat": 41.680893,
+      "Lon": -71.51178
+   },
+   "SC": {
+      "State": "South Carolina",
+      "Lat": 33.856892,
+      "Lon": -80.945007
+   },
+   "SD": {
+      "State": "South Dakota",
+      "Lat": 44.299782,
+      "Lon": -99.438828
+   },
+   "TN": {
+      "State": "Tennessee",
+      "Lat": 35.747845,
+      "Lon": -86.692345
+   },
+   "TX": {
+      "State": "Texas",
+      "Lat": 31.054487,
+      "Lon": -97.563461
+   },
+   "UT": {
+      "State": "Utah",
+      "Lat": 40.150032,
+      "Lon": -111.862434
+   },
+   "VT": {
+      "State": "Vermont",
+      "Lat": 44.045876,
+      "Lon": -72.710686
+   },
+   "VA": {
+      "State": "Virginia",
+      "Lat": 37.769337,
+      "Lon": -78.169968
+   },
+   "WA": {
+      "State": "Washington",
+      "Lat": 47.400902,
+      "Lon": -121.490494
+   },
+   "WV": {
+      "State": "West Virginia",
+      "Lat": 38.491226,
+      "Lon": -80.954453
+   },
+   "WI": {
+      "State": "Wisconsin",
+      "Lat": 44.268543,
+      "Lon": -89.616508
+   },
+   "WY": {
+      "State": "Wyoming",
+      "Lat": 42.755966,
+      "Lon": -107.30249
+   }
+}

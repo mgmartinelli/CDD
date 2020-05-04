@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>GeoLocation Visulation Testing</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin=""/>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        
+        {% load static %}
+        <!-- <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+        <script src="{% static "bootstrap/js/bootstrap.min.js" %}" type="text/javascript"></script> -->
+        <link rel="stylesheet" href="{% static "map/css/styles.css" %}">
+    </head>
+
+    <body>
+        {% include 'includes/navbar.html' %}
+        <div id="mapid"></div>
+
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+
+        <script>
+            var mapboxAccessToken = 'pk.eyJ1Ijoicm9oYW4xOTk4IiwiYSI6ImNrOTFzczRtNzAxNGozbG1wYTExemYzc24ifQ.WVAb4vO7_EMFTh_PdrfDNg';
+            var map = L.map('mapid').setView([{{lat}}, {{lon}}], 7);
+            var US_state = "{{state}}"
+        </script>
+        {% load static %}
+        <script src="{% static "map/js/map.js" %}" type="text/javascript"></script>
+
+        <script>
+
+            var dataURL = "/api/" + "{{state}}" + "/data";      
+            $.ajax({
+                method: "GET",
+                url: dataURL,
+                success: function(data){ 
+                    statesData["type"] = "FeatureCollection";
+                    statesData.features = data; // this will log out the json object
+                }, 
+                error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            });
+            
+
+            waitThenRun(drawStateData);
+        </script>
+    </body>
+
+</html>

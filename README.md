@@ -1,4 +1,6 @@
-# Teamwork Analysis Dashboard
+# SPRING 2020 CMSC 447, Team 1 (District MAKKERs)
+
+Visit our website [here][heroku-website].
 
 ### Requirements:
 
@@ -67,3 +69,4 @@ Go to [localhost][localhost-link] on your browser (typically 127.0.0.1, port 800
 [virtualenv-link]: https://virtualenv.pypa.io/en/latest/installation.html
 [pip-link]: https://pip.pypa.io/en/stable/installing/
 [pycharm-virtualenv-link]: https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html
+[heroku-website]: https://congressionaldistrictdrawer.herokuapp.com/

@@ -16,9 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from map.views import home_view
+from map.views import home_view, map_view, RestDashboardDistrictData
+
+app_name = 'map'
 
 urlpatterns = [
 	path('', home_view, name='home'),
     path('admin/', admin.site.urls),
+    path('map/<str:state>/', map_view, name='map-view'),
+    path('api/<str:state>/data', RestDashboardDistrictData.as_view(), name='api-rest-data'),
+
 ]

@@ -1,5 +1,8 @@
+html, body {
+    height: 100%;
+ }
 #mapid { 
-    height: 580px; 
+    height:1000px;    
 }
 
 .info {
@@ -26,3 +29,9 @@
     margin-right: 8px;
     opacity: 0.7;
 }
+
+.tata .tata-title {
+    font-family: Helvetica;
+    font-weight:300;
+}
+

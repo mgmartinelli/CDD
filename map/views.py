@@ -7,7 +7,6 @@ import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from django.contrib.staticfiles.storage import staticfiles_storage
 
 # Homepage view
 def home_view(request, *args, **kwargs):
@@ -15,7 +14,7 @@ def home_view(request, *args, **kwargs):
 
 # Map view of the districts
 def map_view(request, state, *args, **kwargs):
-    url = 'static/state_locations/state-locations.json'
+    url = 'map/state_locations/state-locations.json'
     f = open(url) 
     data = json.load(f) 
 
@@ -33,7 +32,7 @@ class RestDashboardDistrictData(APIView):
 
     def get(self, request, state, format=None):      
         json_response = []
-        filename = f'static/results/{state}_Results.json'
+        filename = f'map/results/{state}_Results.json'
         with open(filename, 'r') as f:
             json_response = json.load(f)
         

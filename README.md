@@ -1,4 +1,4 @@
-# Teamwork Analysis Dashboard
+# SPRING 2020 CMSC 447, Team 1 (District MAKKERs)
 
 ### Requirements:
 

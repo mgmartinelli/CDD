@@ -1,5 +1,8 @@
+html, body {
+    height: 100%;
+ }
 #mapid { 
-    height: 580px; 
+    height:1000px;    
 }
 
 .info {
@@ -31,3 +34,4 @@
     font-family: Helvetica;
     font-weight:300;
 }
+

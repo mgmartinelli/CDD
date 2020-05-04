@@ -98,7 +98,7 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4 style="text-align:center">US States</h4>' +  (props ?
+    this._div.innerHTML = '<h4 style="text-align:center">United States</h4>' +  (props ?
         '<b> State: </b>' + props.name
         : 'Click on a state to view its districts');
 };

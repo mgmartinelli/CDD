@@ -1,7 +1,6 @@
 
 var geojson;
 var newWindow;
-var statesData = {};
 
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
@@ -14,8 +13,8 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
 
 
-function getColor(d) {
-    var items = ['#E35F5F', '#ffa500', '#ffff00', '#008000', '#0000ff', '#ee82ee', '#4b0082']
+function getColor() {
+   var items = ['#E35F5F', '#ffa500', '#ffff00', '#008000', '#0000ff', '#ee82ee', '#4b0082']
 
     var item = items[Math.floor(Math.random() * items.length)];
     return item;
@@ -57,15 +56,26 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        click: goToMap
     });
 }
 
-function zoomToFeature(e) {
-    //newWindow = window.open("index.html?coords=" + encodeURI(e), "_blank");
-    //zoomInOnOtherWindow(newWindow, e);
-    //test = e.target.getBounds();
-    map.fitBounds(e.target.getBounds());
+function goToMap(e) {
+    var state = e.target.feature.properties.name;
+    if(state in states_hash){
+        var url = "/map/" + states_hash[state];
+        window.location = url;
+    }
+    else {
+        var msg = "Sorry, no data available for " + state + " yet!";
+        tata.error(msg, '', {
+            duration: 6000,
+        });
+
+
+    }
+
+    //map.fitBounds(e.target.getBounds());
 }
 
 function zoomInOnOtherWindow(newWindow, e){
@@ -88,9 +98,9 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>' + US_state + ' Districts</h4>' +  (props ?
-        '<b> District: </b>' + props.name.substring(props.name.length-2, props.name.length) + '<br />' + '<b> Population: </b>' + props.population + '</br><b> Voting Booths: </b>' + props.num_voting_booths
-        : 'Hover over a state');
+    this._div.innerHTML = '<h4 style="text-align:center">US States</h4>' +  (props ?
+        '<b> State: </b>' + props.name
+        : 'Click on a state to view its districts');
 };
 
 info.addTo(map);
@@ -134,7 +144,7 @@ function waitThenRun(callback) {
         callback();
         clearInterval(intervalId);
       }
-    }, 1);
+    }, 10);
   }
 
 function drawStateData() {  

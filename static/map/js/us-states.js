@@ -127,7 +127,6 @@ var states_hash =
   'Delaware': 'DE',
   'Georgia': 'GA',
   'Idaho': 'ID',
-  'Illinois': 'IL',
   'Indiana': 'IN',
   'Iowa': 'IA',
   'Kentucky': 'KY',

@@ -13,9 +13,11 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
 
 
-function getColor() {
-   var items = ['#E35F5F', '#ffa500', '#ffff00', '#008000', '#0000ff', '#ee82ee', '#4b0082']
-
+function getColor(gray) {
+    var items = ['#E35F5F', '#ffa500', '#ffff00', '#008000', '#0000ff', '#ee82ee', '#4b0082'];
+    if(gray){
+        items = ['#D3D3D3'];	
+    }
     var item = items[Math.floor(Math.random() * items.length)];
     return item;
 }
@@ -149,7 +151,12 @@ function waitThenRun(callback) {
 
 function drawStateData() {  
     for(let i = 0; i < statesData["features"].length; i++){
-        statesData["features"][i]["properties"]["color"] = getColor();
+        if(statesData["features"][i]["properties"]["name"] in states_hash){
+            statesData["features"][i]["properties"]["color"] = getColor(0);
+        }
+        else{
+            statesData["features"][i]["properties"]["color"] = getColor(1);    
+        }
     }
     geojson = L.geoJson(statesData, {
         style: style,

@@ -133,6 +133,7 @@ var states_hash =
   'Kentucky': 'KY',
   'Maryland': 'MD',
   'Mississippi': 'MS',
+  'Montana': 'MT',
   'Minnesota': 'MN',  
   'North Carolina': 'NC',
   'Nevada': 'NV',

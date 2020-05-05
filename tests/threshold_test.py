@@ -29,7 +29,8 @@ def threshold_test(path_to_file, metric, error_percentage, verbose):
 
 	# Calculate average population/voting booths per district
 	avg = sum / num_dist
-
+	if verbose:
+		print(f'Average {metric} is {avg}')
 	# calculate upper and lower bound
 	upper = avg * (1 + error_percentage)
 	lower = avg * (1 - error_percentage)
@@ -63,7 +64,7 @@ if __name__ == "__main__":
 	for result in JSON_results:
 		threshold_test(result, "population", pop_thresh, False)
 
-	voting_thresh = 0.46
+	voting_thresh = 0.73
 	print()
 	print(f"***** Voting Booths Tests: (Threshold: {voting_thresh*100}%) ******")
 	for result in JSON_results:

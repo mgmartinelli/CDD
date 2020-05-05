@@ -143,6 +143,7 @@ var states_hash =
   'Oklahoma': 'OK',
   'Rhode Island': 'RI',
   'South Carolina': 'SC',
+  'South Dakota': 'SD',
   'Tennessee': 'TN',
   'Texas': 'TX',
   'Utah': 'UT',

@@ -2,6 +2,8 @@
 
 Visit our website [here][heroku-website].
 
+The algorithm that determines new district lines is slightly adapted from Chris Larson's *redistricting* project. That GitHub repo can be found [here][chrismlarson-repo] 
+
 ### Requirements:
 
 The application is run using Python 3.7, but anything above 3.5 should be a safe bet.
@@ -70,3 +72,4 @@ Go to [localhost][localhost-link] on your browser (typically 127.0.0.1, port 800
 [pip-link]: https://pip.pypa.io/en/stable/installing/
 [pycharm-virtualenv-link]: https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html
 [heroku-website]: https://congressionaldistrictdrawer.herokuapp.com/
+[chrismlarson-repo]: https://github.com/chrismlarson/redistricting
